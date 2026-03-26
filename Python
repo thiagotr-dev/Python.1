@@ -1,0 +1,44 @@
+# Jogo Caça-Níquel
+import random
+# Símbolos possíveis
+simbolos = ["🍒", "🍋", "🔔", "⭐", "💎"]
+# Saldo inicial
+saldo = 100
+def girar():
+    return [random.choice(simbolos) for _ in range(3)]
+def calcular_premio(resultado, aposta):
+    # Se caírem 3 símbolos iguais
+    if resultado[0] == resultado[1] == resultado[2]:
+        return aposta * 5
+    # Se caírem 2 símbolos iguais
+    elif resultado[0] == resultado[1] or resultado[1] == resultado[2] or resultado[0] == resultado[2]:
+        return aposta * 2
+    else:
+        return 0
+print("🎰 Bem-vindo(a) ao Caça-Níquel!")
+while saldo > 0:
+    print(f"\n💰 Saldo atual: R$ {saldo:.2f}", end="\n\n")
+    try:
+        aposta = float(input(" Quanto você deseja apostar? (0 para sair): "))
+        print()
+        if aposta == 0:
+            print(" Você saiu do jogo... Até a próxima vez!")
+            break
+        if aposta > saldo or aposta <= 0:
+            print("Aposta inválida!")
+            continue
+        # Girar a máquina
+        resultado = girar()
+        print("                  "," | ".join(resultado), end="\n\n")
+        # Calcular o prêmio
+        premio = calcular_premio(resultado, aposta)
+        if premio > 0:
+            print(f"🎉 Parabéns! Você ganhou: R$ {premio:.2f}")
+            saldo += premio
+        else:
+            print("😢 Você perdeu!")
+            saldo -= aposta
+    except ValueError:
+        print("Digite um valor válido!")
+if saldo <= 0:
+    print("\n💀 Você ficou sem saldo! Fim de jogo.")
